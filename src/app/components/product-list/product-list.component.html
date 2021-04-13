@@ -6,7 +6,7 @@
     </h3>
     <h3 class="product-price">
       {{ product.price | currency }} |
-      <button type="submit">Buy Now</button>
+      <button (click)="checkout()">Buy Now</button>
     </h3>
   </div>
 </div>
