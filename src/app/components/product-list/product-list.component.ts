@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Product } from 'src/app/models/Product';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -16,7 +18,11 @@ export class ProductListComponent implements OnInit {
     description: 'test',
   };
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
+
+  getCheckout(eventProduct: any) {
+    console.log(eventProduct);
+  }
 
   ngOnInit(): void {}
 }
