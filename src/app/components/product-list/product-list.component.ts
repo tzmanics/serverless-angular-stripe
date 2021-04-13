@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Product } from 'src/app/models/Product';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { loadStripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-product-list',
@@ -18,11 +18,27 @@ export class ProductListComponent implements OnInit {
     description: 'test',
   };
 
+  private response: any;
+
   constructor(private http: HttpClient) {}
 
-  getCheckout(eventProduct: any) {
-    console.log(eventProduct);
+  async triggerCreateCheckout(eventProduct: any) {
+    this.response = await this.http
+      .post('/.netlify/functions/createCheckout', eventProduct, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .toPromise();
+    this.openStripe(this.response);
   }
+
+  openStripe = async (stripeParams: any) => {
+    const stripe = await loadStripe(stripeParams.publishableKey);
+    const { error } = await stripe!.redirectToCheckout({
+      sessionId: stripeParams.sessionId,
+    });
+  };
 
   ngOnInit(): void {}
 }
